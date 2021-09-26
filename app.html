@@ -80,15 +80,15 @@
     
 </body>
 
-<script type="text/javascript"> //-------------------------------JAVASCRIPT--------------------------------------------
+<script type="text/javascript"> 
     document.addEventListener('click', (e) => {
     
     const listClasse = Array.prototype.slice.call(e.target.classList);
     
     if (e.target && listClasse.includes('acessarFilme')) {
         const url = e.target.dataset.url;
-        alert('pagina');
-       //window.open(url, '_blank');
+       //alert('pagina');
+       window.open(url, '_blank');
     }  
     
     if (e.target && listClasse.includes('excluirFilme')) {
