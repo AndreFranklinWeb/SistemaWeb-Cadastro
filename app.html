@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    
+    <title>App Filmes</title>
+
+    <style>
+        pre{
+            padding: 29px;
+            background: #ccc;
+            border-radius: 10px;
+            margin:20px;
+        }
+    </style>
+
+</head>    
+<body>
+    <div class="container">
+        <pre id="debug"></pre>
+        <h1>Filmes</h1>
+        <form class="jumbotron">
+            <div class="row">
+
+                <div class="col-4">
+                    <label>Titulo</label>
+                    <input id="titulo" onkeyup="atualizarDados()" type="text" class="form-control" placeholder="Titulo">    
+                </div>
+
+                <div type="url" class="col-3">
+                    <label>Link</label>
+                    <input id="link" onkeyup="atualizarDados()" type="url" class="form-control" placeholder="URL">
+                </div>
+
+                <div  class="col-3">
+                    <label>Categoria</label>
+                    <select id="categoria" onchange="atualizarDados()" class="form-control">
+                        <option>Categoria 1</option>
+                        <option>Categoria 2</option>
+                        <option>Categoria 3</option>
+                    </select>
+                </div>
+
+                <div class="col-2">
+                    <label>Ano</label>
+                    <input id="ano" onkeyup="atualizarDados()" type="number" class="form-control" />
+                </div>                
+            </div>
+
+            <br />
+            
+            <a href="javascript:void(0)" 
+            onclick="cadastrar()" 
+            class="btn btn-lg btn btn-block  btn btn-success">
+                Cadastrar Filme            
+            </a>
+
+        </form>
+        
+        <br/>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Categorias</th>
+                    <th scope="col">Ano</th>
+                    <th scope="col" class="text-right">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody id="lista_filmes"></tbody>
+            
+        </table>
+    </div>
+    
+</body>
+
+<script type="text/javascript"> //-------------------------------JAVASCRIPT--------------------------------------------
+    document.addEventListener('click', (e) => {
+    
+    const listClasse = Array.prototype.slice.call(e.target.classList);
+    
+    if (e.target && listClasse.includes('acessarFilme')) {
+        const url = e.target.dataset.url;
+        alert('pagina');
+       //window.open(url, '_blank');
+    }  
+    
+    if (e.target && listClasse.includes('excluirFilme')) {
+        const response = confirm('Deseja realmente excluir esse filme?');
+        if(response) {
+            const id = e.target.dataset.id;
+            document.getElementById(id).remove(); //ERROR NA EXCLUSÃO, não está excluindo            
+        }                  
+   }
+});
+
+let dados = {
+    titulo: '',
+    ano: '',
+    categoria: '',
+    link: '',
+};
+
+const atualizarDados = () => {
+    dados = {
+        titulo: document.getElementById('titulo').value,
+        ano: document.getElementById('ano').value,
+        categoria: document.getElementById('categoria').value,
+        link: document.getElementById('link').value,
+    };
+    document.getElementById('debug').innerHTML = JSON.stringify(dados);    
+};
+
+const montaItem = () => {    
+    const id = new Date().getTime();
+    const item = `     
+        <tr id="${id}">
+        <td>${dados.titulo}</td>
+        <td>${dados.categoria}</td>
+        <td>${dados.ano}</td>
+        <td class="text-right">
+            <button class="btn btn-info acessarFilme" data-url"${dados.link}">Acessar</button>
+            <button class="btn btn-danger excluirFilme" data-id"${id}">Excluir</button>
+        </td>
+        </tr>`;    
+    return item;
+};
+
+const cadastrar = () => {
+    if(
+        dados.titulo == '' ||
+        dados.ano == 0 ||
+        dados.categoria == '' ||
+        dados.link == '' 
+    ) {
+        alert('Preencha todos os campos');
+    } else {
+      document
+        .getElementById('lista_filmes')
+        .insertAdjacentHTML('beforeEnd', montaItem());
+      dados = {};
+        }
+    };      //-------------------------------------------------------------------------------------------
+</script> 
+
+</html>
